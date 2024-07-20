@@ -11,18 +11,25 @@ class S21Matrix {
   double**
       matrix_;  // Двойной указатель на ячейку памяти, где храниться матрица
 
-  void S21Matrix::allocate_matrix();
-  void S21Matrix::copy_matrix_value(const S21Matrix& other);
-
+  // Доп. методы
+  void allocate_matrix();
+  void copy_matrix_value(const S21Matrix& other);
+  bool matrix_size_eq(const S21Matrix& orher);
   void remove_matrix();
 
  public:
+  // Конструкторы и Деструктор
   S21Matrix();
   S21Matrix(int rows, int cols);
   S21Matrix(const S21Matrix& other);
   ~S21Matrix();
 
+  // Метод
   bool equal_matrix(const S21Matrix& other);
+
+//  Перегрузка операторов
+  bool operator==(const S21Matrix& other);
+  double& operator()(int row, int col);
 };
 
 #endif

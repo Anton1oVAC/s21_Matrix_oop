@@ -1,11 +1,8 @@
 CC=g++ -std=c++17
 FLAGS=-Wall -Werror -Wextra
-
+COVFLAG = --coverage
+TEST_FLAGS = -lgtest -lgmock -pthread
 PROJECT=s21_matrix_oop.cpp
-s21_matrix_oop=s21_matrix_oop
-O=s21_matrix_oop.o
-A=s21_matrix_oop.a
-BUILD=./
 
 
 all: s21_matrix_oop.a
@@ -14,9 +11,9 @@ s21_matrix_oop.a:
 	$(CC) -c s21_matrix_oop.cpp -o matrix_oop.o $(CFLAGS)
 	ar rcs s21_matrix_oop.a matrix_oop.o
 
-
-run:
-	./$(B)
+test:
+	$(CC) $(COVFLAG) s21_matrix_oop.cpp s21_test.cpp -o test $(TEST_FLAGS)
+	./test
 
 clang_n:
 	clang-format -n *.cpp *.h 
@@ -28,3 +25,6 @@ clang_i:
 clean:
 	rm -rf *.o 
 	rm -rf *.a
+	rm -rf test
+	rm -rf *.gcda
+	rm -rf *.gcno

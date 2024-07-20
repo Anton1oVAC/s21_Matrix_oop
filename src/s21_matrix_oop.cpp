@@ -29,10 +29,37 @@ S21Matrix::~S21Matrix() {
   cols_ = 0;
 }
 
-
 // Методы
 
-bool S21Matrix::equal_matrix(const S21Matrix& other) {}
+bool S21Matrix::equal_matrix(const S21Matrix& other) {
+  bool result = false;
+  if (this->matrix_size_eq(other)) {
+    result = true;
+    for (int i = 0; i < this->rows_; i++) {
+      for (int j = 0; j < this->cols_; j++) {
+        if (fabsl(this->matrix_[i][j] - other.matrix_[i][j]) > 1e-7) {
+          result = false;
+        }
+      }
+    }
+  }
+  return result;
+}
+
+
+// Перегрузка операторов
+
+bool S21Matrix::operator==(const S21Matrix& other) {
+  return this->equal_matrix(other);
+}
+
+// Доступ к элементу по индексу
+double& S21Matrix::operator()(int i, int j){
+    if (i < 0 || j < 0 || i >= rows_ || j >= rows_ * cols_){
+        throw std::out_of_range("index outside the matrix");
+    }
+    return matrix_[i][j];
+}
 
 
 // Доп методы
@@ -47,12 +74,19 @@ void S21Matrix::allocate_matrix() {
 }
 
 // Копирует значения из другой матрицы
-void S21Matrix::copy_matrix_value(const S21Matrix& other){
-    for (int i = 0; i < rows_; i++){
-        for(int j = 0; j < cols_; j++){
-            matrix_[i][j] = other.matrix_[i][j];
-        }
+void S21Matrix::copy_matrix_value(const S21Matrix& other) {
+  for (int i = 0; i < rows_; i++) {
+    for (int j = 0; j < cols_; j++) {
+      matrix_[i][j] = other.matrix_[i][j];
     }
+  }
+}
+
+bool S21Matrix::matrix_size_eq(const S21Matrix& other) {
+  if (rows_ == other.rows_ && cols_ == other.cols_) {
+    return true;
+  }
+  return false;
 }
 
 // Освобождение памяти
