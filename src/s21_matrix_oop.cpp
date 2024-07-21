@@ -1,6 +1,6 @@
 #include "s21_matrix_oop.h"
 
-// Конструкторы
+// ########### Конструкторы
 
 // Инициализирует матрицу размером 3x3.
 S21Matrix::S21Matrix() : S21Matrix(3, 3){};
@@ -29,8 +29,8 @@ S21Matrix::~S21Matrix() {
   cols_ = 0;
 }
 
-// Методы
-
+// ############ Методы
+// Проверяет матрицы на равенство
 bool S21Matrix::equal_matrix(const S21Matrix& other) {
   bool result = false;
   if (this->matrix_size_eq(other)) {
@@ -46,23 +46,56 @@ bool S21Matrix::equal_matrix(const S21Matrix& other) {
   return result;
 }
 
+// Складывает две матрицы поэментно, если у них одинаковые размеры
+void S21Matrix::sum_matrix(const S21Matrix& other) {
+  if (this->matrix_size_eq(other)) {
+    for (int i = 0; i < rows_ * cols_; i++) {
+      matrix_[0][i] = matrix_[0][i] + other.matrix_[0][i];
+    }
+  } else {
+    throw std::invalid_argument("matrix of different sizes");
+  }
+}
 
-// Перегрузка операторов
+// ###########  Перегрузка операторов
 
+// присвоение матрице значений другой матрицы
+S21Matrix& S21Matrix::operator=(const S21Matrix& other) {
+  this->remove_matrix();
+  rows_ = other.rows_;
+  cols_ = other.cols_;
+  this->allocate_matrix();
+  this->copy_matrix_value(other);
+  return *this;
+}
+
+// Проверяет, равны ли две матрицы
 bool S21Matrix::operator==(const S21Matrix& other) {
   return this->equal_matrix(other);
 }
 
 // Доступ к элементу по индексу
-double& S21Matrix::operator()(int i, int j){
-    if (i < 0 || j < 0 || i >= rows_ || j >= rows_ * cols_){
-        throw std::out_of_range("index outside the matrix");
-    }
-    return matrix_[i][j];
+double& S21Matrix::operator()(int i, int j) {
+  if (i < 0 || j < 0 || i >= rows_ || j >= rows_ * cols_) {
+    throw std::out_of_range("index outside the matrix");
+  }
+  return matrix_[i][j];
 }
 
+// Складывает другую матрицу с текущей.
+S21Matrix& S21Matrix::operator+=(const S21Matrix& other) {
+  this->sum_matrix(other);
+  return *this;
+}
 
-// Доп методы
+// Возвращает результат суммы двух матриц
+S21Matrix S21Matrix::operator+(const S21Matrix& other) {
+  S21Matrix result = S21Matrix(*this);
+  result.sum_matrix(other);
+  return result;
+}
+
+// ############ Доп методы
 
 // Выделяет память под матрицу
 void S21Matrix::allocate_matrix() {
