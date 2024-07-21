@@ -27,6 +27,7 @@ class S21Matrix {
   // Метод
   bool equal_matrix(const S21Matrix& other);
   void sum_matrix(const S21Matrix& other);
+  void sub_matrix(const S21Matrix& other);
 
   //  Перегрузка операторов
   S21Matrix& operator=(const S21Matrix& other);
@@ -34,6 +35,8 @@ class S21Matrix {
   double& operator()(int row, int col);
   S21Matrix& operator+=(const S21Matrix& other);
   S21Matrix operator+(const S21Matrix& other);
+  S21Matrix& operator-=(const S21Matrix& other);
+  S21Matrix operator-(const S21Matrix& other);
 };
 
 #endif

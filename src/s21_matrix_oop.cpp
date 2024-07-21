@@ -57,6 +57,17 @@ void S21Matrix::sum_matrix(const S21Matrix& other) {
   }
 }
 
+// вычитает из текущей матрицы другую
+void S21Matrix::sub_matrix(const S21Matrix& other) {
+  if (this->matrix_size_eq(other)) {
+    for (int i = 0; i < rows_ * cols_; i++) {
+      matrix_[0][i] = matrix_[0][i] - other.matrix_[0][i];
+    }
+  } else {
+    throw std::invalid_argument("matrix of different sizes");
+  }
+}
+
 // ###########  Перегрузка операторов
 
 // присвоение матрице значений другой матрицы
@@ -92,6 +103,19 @@ S21Matrix& S21Matrix::operator+=(const S21Matrix& other) {
 S21Matrix S21Matrix::operator+(const S21Matrix& other) {
   S21Matrix result = S21Matrix(*this);
   result.sum_matrix(other);
+  return result;
+}
+
+// Вычитает другую матрицу с текущей
+S21Matrix& S21Matrix::operator-=(const S21Matrix& other) {
+  this->sub_matrix(other);
+  return *this;
+}
+
+// Возвращает результат разности двух матриц
+S21Matrix S21Matrix::operator-(const S21Matrix& other) {
+  S21Matrix result = S21Matrix(*this);
+  result.sub_matrix(other);
   return result;
 }
 
