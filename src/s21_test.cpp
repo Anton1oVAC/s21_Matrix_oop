@@ -194,6 +194,7 @@ TEST(test_3_sub_matrix, square_matrix) {
   m3.sub_matrix(m2);
   EXPECT_TRUE(m1 == m3);
 }
+
 TEST(test_3_sub_matrix, different_matrix) {
   S21Matrix m1(2, 4);
   S21Matrix m2(2, 4);
@@ -228,6 +229,7 @@ TEST(test_3_sub_matrix, different_matrix) {
   m3.sub_matrix(m2);
   EXPECT_TRUE(m1 == m3);
 }
+
 TEST(test_3_sub_matrix, operator_sub_one) {
   S21Matrix m1(2, 2);
   S21Matrix m2(2, 2);
@@ -249,6 +251,7 @@ TEST(test_3_sub_matrix, operator_sub_one) {
   m3 -= m2;
   EXPECT_TRUE(m1 == m3);
 }
+
 TEST(test_3_sub_matrix, operator_sub_two) {
   S21Matrix m1(2, 2);
   S21Matrix m2(2, 2);
@@ -273,10 +276,147 @@ TEST(test_3_sub_matrix, operator_sub_two) {
   m4 = m3 - m2;
   EXPECT_TRUE(m4 == m1);
 }
+
 TEST(test_3_sub_matrix, exception) {
   S21Matrix m1(2, 2);
   S21Matrix m2(2, 4);
   EXPECT_THROW(m1.sub_matrix(m2), std::invalid_argument);
+}
+
+// MUL_NUMBER
+TEST(test_4_mul_number, square_matrix_and_number) {
+  S21Matrix m1(2, 2);
+  S21Matrix m2(2, 2);
+  m1(0, 0) = 2;
+  m1(0, 1) = 2;
+  m1(1, 0) = 2;
+  m1(1, 1) = 2;
+
+  m2(0, 0) = 2000;
+  m2(0, 1) = 2000;
+  m2(1, 0) = 2000;
+  m2(1, 1) = 2000;
+
+  m1.mul_number(1000);
+  EXPECT_TRUE(m1 == m2);
+}
+
+// TEST(test_4_mul_number, rectangular_matrix_and_double){
+// get_rows and get_cols
+// }
+// TEST(test_4_mul_number, operator_one){
+// get_rows and get_cols
+// }
+// TEST(test_4_mul_number, operator_two){
+// get_rows and get_cols
+// }
+
+// MUL_MATRIX
+// TEST(test_5_mul_matrix, square_matrix){
+//  get_rows and get_cols
+// }
+
+TEST(test_5_mul_matrix, rectangular_matrix) {
+  S21Matrix m1(3, 2);
+  S21Matrix m2(2, 3);
+  S21Matrix m3(3, 3);
+  m1(0, 0) = 1;
+  m1(0, 1) = 4;
+  m1(1, 0) = 2;
+  m1(1, 1) = 5;
+  m1(2, 0) = 3;
+  m1(2, 1) = 6;
+
+  m2(0, 0) = 1;
+  m2(0, 1) = -1;
+  m2(0, 2) = 1;
+  m2(1, 0) = 2;
+  m2(1, 1) = 3;
+  m2(1, 2) = 4;
+
+  m3(0, 0) = 9;
+  m3(0, 1) = 11;
+  m3(0, 2) = 17;
+  m3(1, 0) = 12;
+  m3(1, 1) = 13;
+  m3(1, 2) = 22;
+  m3(2, 0) = 15;
+  m3(2, 1) = 15;
+  m3(2, 2) = 27;
+  m1.mul_matrix(m2);
+  EXPECT_TRUE(m1 == m3);
+}
+
+TEST(test_5_mul_matrix, operator_one) {
+  S21Matrix m1(3, 2);
+  S21Matrix m2(2, 3);
+  S21Matrix m3(3, 3);
+  m1(0, 0) = 1;
+  m1(0, 1) = 4;
+  m1(1, 0) = 2;
+  m1(1, 1) = 5;
+  m1(2, 0) = 3;
+  m1(2, 1) = 6;
+
+  m2(0, 0) = 1;
+  m2(0, 1) = -1;
+  m2(0, 2) = 1;
+  m2(1, 0) = 2;
+  m2(1, 1) = 3;
+  m2(1, 2) = 4;
+
+  m3(0, 0) = 9;
+  m3(0, 1) = 11;
+  m3(0, 2) = 17;
+  m3(1, 0) = 12;
+  m3(1, 1) = 13;
+  m3(1, 2) = 22;
+  m3(2, 0) = 15;
+  m3(2, 1) = 15;
+  m3(2, 2) = 27;
+
+  m1 *= m2;
+  EXPECT_TRUE(m1 == m3);
+}
+
+TEST(test_5_mul_matrix, operator_two) {
+  S21Matrix m1(3, 2);
+  S21Matrix m2(2, 3);
+  S21Matrix m3(3, 3);
+  S21Matrix m4(3, 3);
+
+  m1(0, 0) = 1;
+  m1(0, 1) = 4;
+  m1(1, 0) = 2;
+  m1(1, 1) = 5;
+  m1(2, 0) = 3;
+  m1(2, 1) = 6;
+
+  m2(0, 0) = 1;
+  m2(0, 1) = -1;
+  m2(0, 2) = 1;
+  m2(1, 0) = 2;
+  m2(1, 1) = 3;
+  m2(1, 2) = 4;
+
+  m3(0, 0) = 9;
+  m3(0, 1) = 11;
+  m3(0, 2) = 17;
+  m3(1, 0) = 12;
+  m3(1, 1) = 13;
+  m3(1, 2) = 22;
+  m3(2, 0) = 15;
+  m3(2, 1) = 15;
+  m3(2, 2) = 27;
+
+  m4 = m1 * m2;
+  EXPECT_TRUE(m3 == m4);
+}
+
+TEST(test_5_mul_matrix, exception) {
+  S21Matrix m1(2, 4);
+  S21Matrix m2(2, 4);
+  EXPECT_THROW(m1.mul_matrix(m2), std::invalid_argument);
 }
 
 int main(int argc, char* argv[]) {

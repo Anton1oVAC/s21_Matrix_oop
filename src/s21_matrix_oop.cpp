@@ -68,6 +68,33 @@ void S21Matrix::sub_matrix(const S21Matrix& other) {
   }
 }
 
+//  Умножение матрицы на число
+void S21Matrix::mul_number(const double num) {
+  for (int i = 0; i < rows_ * cols_; i++) {
+    matrix_[0][i] = matrix_[0][i] * num;
+  }
+}
+
+// Умножение матрицы на матрицу
+void S21Matrix::mul_matrix(const S21Matrix& other) {
+  if (rows_ != other.cols_) {
+    throw std::invalid_argument(
+        "The number of columns of the first matrix is ​​not equal to the "
+        "number of rows of the second matrix");
+  }
+  S21Matrix result = S21Matrix(this->rows_, other.cols_);
+  for (int i = 0; i < rows_; i++) {
+    for (int j = 0; j < other.cols_; j++) {
+      double sum = 0;
+      for (int k = 0; k < cols_; k++) {
+        sum += matrix_[i][k] * other.matrix_[k][j];
+      }
+      result.matrix_[i][j] = sum;
+    }
+  }
+  *this = result;
+}
+
 // ###########  Перегрузка операторов
 
 // присвоение матрице значений другой матрицы
@@ -116,6 +143,32 @@ S21Matrix& S21Matrix::operator-=(const S21Matrix& other) {
 S21Matrix S21Matrix::operator-(const S21Matrix& other) {
   S21Matrix result = S21Matrix(*this);
   result.sub_matrix(other);
+  return result;
+}
+
+// Умножение матрицы на число
+S21Matrix& S21Matrix::operator*=(const double num) {
+  this->mul_number(num);
+  return *this;
+}
+
+// Умножения исходной матрицы на заданное число
+S21Matrix S21Matrix::operator*(const double num) {
+  S21Matrix result = S21Matrix(*this);
+  result.mul_number(num);
+  return result;
+}
+
+// Умножение другую матрицы с текущей матрицей
+S21Matrix& S21Matrix::operator*=(const S21Matrix& other) {
+  this->mul_matrix(other);
+  return *this;
+}
+
+// Возвращает результат умножения матрицы на матрицу
+S21Matrix S21Matrix::operator*(const S21Matrix& other) {
+  S21Matrix result = S21Matrix(*this);
+  result.mul_matrix(other);
   return result;
 }
 
