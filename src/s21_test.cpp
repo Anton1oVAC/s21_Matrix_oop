@@ -419,6 +419,35 @@ TEST(test_5_mul_matrix, exception) {
   EXPECT_THROW(m1.mul_matrix(m2), std::invalid_argument);
 }
 
+
+// TRANSPOSE
+// TEST(test_6_transpose, square_matrix) {
+//   get_rows and get_cols
+// }
+
+TEST(test_6_transpose, rectangular_matrix) {
+  S21Matrix m1(3, 2);
+  S21Matrix m2(2, 3);
+  S21Matrix m3(2, 3);
+
+  m1(0, 0) = 1;
+  m1(0, 1) = 4;
+  m1(1, 0) = 2;
+  m1(1, 1) = 5;
+  m1(2, 0) = 3;
+  m1(2, 1) = 6;
+
+  m2(0, 0) = 1;
+  m2(0, 1) = 2;
+  m2(0, 2) = 3;
+  m2(1, 0) = 4;
+  m2(1, 1) = 5;
+  m2(1, 2) = 6;
+
+  m3 = m1.transpose();
+  EXPECT_TRUE(m2 == m3);
+}
+
 int main(int argc, char* argv[]) {
   testing::InitGoogleTest(&argc, argv);
 

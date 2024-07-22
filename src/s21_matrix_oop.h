@@ -30,6 +30,7 @@ class S21Matrix {
   void sub_matrix(const S21Matrix& other);
   void mul_number(const double num);
   void mul_matrix(const S21Matrix& other);
+    S21Matrix transpose();
 
   //  Перегрузка операторов
   S21Matrix& operator=(const S21Matrix& other);

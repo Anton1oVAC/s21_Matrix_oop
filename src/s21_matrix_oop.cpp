@@ -95,6 +95,18 @@ void S21Matrix::mul_matrix(const S21Matrix& other) {
   *this = result;
 }
 
+// Транспонирование матрицы
+S21Matrix S21Matrix::transpose() {
+  S21Matrix transpose_matrix(cols_, rows_);
+  for (int i = 0; i < rows_; i++) {
+    for (int j = 0; j < cols_; j++) {
+      transpose_matrix.matrix_[j][i] = matrix_[i][j];
+    }
+  }
+  return transpose_matrix;
+}
+
+
 // ###########  Перегрузка операторов
 
 // присвоение матрице значений другой матрицы
