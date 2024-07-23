@@ -95,6 +95,37 @@ void S21Matrix::mul_matrix(const S21Matrix& other) {
   *this = result;
 }
 
+// Детерминант матрицы
+double S21Matrix::determinant() {
+  if (rows_ != cols_) {
+    throw std::invalid_argument("matrix don't square");
+  }
+  double result = 0;
+  int size = rows_;
+
+  if (size == 1) {
+    result = matrix_[0][0];
+  } else if (size == 2) {
+    result += matrix_[0][0] * matrix_[1][1];
+    result -= matrix_[0][1] * matrix_[1][0];
+  } else {
+    double temp_deterinant = 0;
+
+    for (int i = 0; i < size; i++) {
+      S21Matrix temp_matrix = this->minor_matrix(i, 0);
+      temp_deterinant = temp_matrix.determinant();
+
+      if (i % 2 == 0) {
+        result += matrix_[i][0] * temp_deterinant;
+      } else {
+        result -= matrix_[i][0] * temp_deterinant;
+      }
+      temp_deterinant = 0;
+    }
+  }
+  return result;
+}
+
 // Транспонирование матрицы
 S21Matrix S21Matrix::transpose() {
   S21Matrix transpose_matrix(cols_, rows_);
@@ -105,7 +136,6 @@ S21Matrix S21Matrix::transpose() {
   }
   return transpose_matrix;
 }
-
 
 // ###########  Перегрузка операторов
 
@@ -204,11 +234,31 @@ void S21Matrix::copy_matrix_value(const S21Matrix& other) {
   }
 }
 
+// Проверяет равны ли матрицы
 bool S21Matrix::matrix_size_eq(const S21Matrix& other) {
   if (rows_ == other.rows_ && cols_ == other.cols_) {
     return true;
   }
   return false;
+}
+
+// Запоняет маленькую матрицу на основе указаных индектов строки и столбца
+S21Matrix S21Matrix::minor_matrix(int row, int col) {
+  S21Matrix result(rows_ - 1, cols_ - 1);
+
+  int res_i = 0, res_j = 0;
+  for (int i = 0; i < rows_ || res_i < rows_ - 1; i++) {
+    if (i == row) continue;
+
+    for (int j = 0; j < cols_ || res_j < (cols_ - 1); j++) {
+      if (j == col) continue;
+
+      result.matrix_[res_i][res_j++] = matrix_[i][j];
+    }
+    res_i++;
+    res_j = 0;
+  }
+  return result;
 }
 
 // Освобождение памяти

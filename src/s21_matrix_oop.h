@@ -15,6 +15,7 @@ class S21Matrix {
   void allocate_matrix();
   void copy_matrix_value(const S21Matrix& other);
   bool matrix_size_eq(const S21Matrix& orher);
+  S21Matrix minor_matrix(int rows, int cols);
   void remove_matrix();
 
  public:
@@ -30,7 +31,8 @@ class S21Matrix {
   void sub_matrix(const S21Matrix& other);
   void mul_number(const double num);
   void mul_matrix(const S21Matrix& other);
-    S21Matrix transpose();
+  S21Matrix transpose();
+  double determinant();
 
   //  Перегрузка операторов
   S21Matrix& operator=(const S21Matrix& other);

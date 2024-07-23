@@ -419,7 +419,6 @@ TEST(test_5_mul_matrix, exception) {
   EXPECT_THROW(m1.mul_matrix(m2), std::invalid_argument);
 }
 
-
 // TRANSPOSE
 // TEST(test_6_transpose, square_matrix) {
 //   get_rows and get_cols
@@ -446,6 +445,31 @@ TEST(test_6_transpose, rectangular_matrix) {
 
   m3 = m1.transpose();
   EXPECT_TRUE(m2 == m3);
+}
+
+// DETERMINANT
+TEST(test_7_determinant, one_elemetn) {
+  S21Matrix m1(1, 1);
+  m1(0, 0) = 10;
+  EXPECT_EQ(10, m1.determinant());
+}
+
+TEST(test_7_determinant, matrix_size_two) {
+  S21Matrix m1(2, 2);
+  m1(0, 0) = 1;
+  m1(0, 1) = 2;
+  m1(1, 0) = 3;
+  m1(1, 1) = 4;
+  EXPECT_EQ(-2, m1.determinant());
+}
+
+// TEST(test_7_determinant, big_matrix){
+//   get_rows and get_cols
+// }
+
+TEST(test_7_determinant, exception) {
+  S21Matrix m1(3, 6);
+  EXPECT_THROW(m1.determinant(), std::invalid_argument);
 }
 
 int main(int argc, char* argv[]) {
