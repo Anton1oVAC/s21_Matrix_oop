@@ -33,6 +33,7 @@ class S21Matrix {
   void mul_matrix(const S21Matrix& other);
   S21Matrix transpose();
   double determinant();
+   S21Matrix calc_complements();
 
   //  Перегрузка операторов
   S21Matrix& operator=(const S21Matrix& other);

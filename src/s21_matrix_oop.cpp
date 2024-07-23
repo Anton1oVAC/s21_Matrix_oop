@@ -126,6 +126,43 @@ double S21Matrix::determinant() {
   return result;
 }
 
+// Аглебраическое дополнение матрицы
+S21Matrix S21Matrix::calc_complements() {
+  if (rows_ != cols_) {
+    throw std::invalid_argument("matrix don't square");
+  }
+  S21Matrix result(rows_, cols_);
+  int size = rows_;
+
+  if (size == 1) {
+    result.matrix_[0][0] = matrix_[0][0];
+  } else if (size == 2) {
+    result.matrix_[0][0] = matrix_[1][1];
+    result.matrix_[0][1] = matrix_[1][0] * -1;
+    result.matrix_[1][0] = matrix_[0][1] * -1;
+    result.matrix_[1][1] = matrix_[0][0];
+  } else {
+    double minor = 0;
+
+    for (int i = 0; i < size; i++) {
+      for (int j = 0; j < size; j++) {
+        S21Matrix temp_matrix = this->minor_matrix(i, j);
+        minor = temp_matrix.determinant();
+
+        int extent = i + j;
+        if (extent % 2 == 0) {
+          result.matrix_[i][j] = minor;
+        } else {
+          result.matrix_[i][j] = minor * -1;
+        }
+        minor = 0;
+      }
+    }
+  }
+  return result;
+}
+
+
 // Транспонирование матрицы
 S21Matrix S21Matrix::transpose() {
   S21Matrix transpose_matrix(cols_, rows_);

@@ -472,6 +472,71 @@ TEST(test_7_determinant, exception) {
   EXPECT_THROW(m1.determinant(), std::invalid_argument);
 }
 
+
+// CALC_COMPLEMENTS
+TEST(test_8_calc_complements, one_element) {
+  S21Matrix m1(1, 1);
+  S21Matrix m2(1, 1);
+  S21Matrix m3(1, 1);
+  m1(0, 0) = 1;
+  m2(0, 0) = 1;
+
+  m3 = m1.calc_complements();
+  EXPECT_TRUE(m2 == m3);
+}
+
+TEST(test_8_calc_complements, matrix_size_two) {
+  S21Matrix m1(2, 2);
+  S21Matrix m2(2, 2);
+  S21Matrix m3(2, 2);
+  m1(0, 0) = 1;
+  m1(0, 1) = 4;
+  m1(1, 0) = 2;
+  m1(1, 1) = 5;
+
+  m2(0, 0) = 5;
+  m2(0, 1) = -2;
+  m2(1, 0) = -4;
+  m2(1, 1) = 1;
+
+  m3 = m1.calc_complements();
+  EXPECT_TRUE(m2 == m3);
+}
+
+TEST(test_8_calc_complements, big_matrix) {
+  S21Matrix m1(3, 3);
+  S21Matrix m2(3, 3);
+  S21Matrix m3(3, 3);
+
+  m1(0, 0) = 1;
+  m1(0, 1) = 2;
+  m1(0, 2) = 3;
+  m1(1, 0) = 0;
+  m1(1, 1) = 4;
+  m1(1, 2) = 2;
+  m1(2, 0) = 5;
+  m1(2, 1) = 2;
+  m1(2, 2) = 1;
+
+  m2(0, 0) = 0;
+  m2(0, 1) = 10;
+  m2(0, 2) = -20;
+  m2(1, 0) = 4;
+  m2(1, 1) = -14;
+  m2(1, 2) = 8;
+  m2(2, 0) = -8;
+  m2(2, 1) = -2;
+  m2(2, 2) = 4;
+
+  m3 = m1.calc_complements();
+  EXPECT_TRUE(m2 == m3);
+}
+
+TEST(test_8_calc_complements, exception) {
+  S21Matrix m1(2, 4);
+  EXPECT_THROW(m1.calc_complements(), std::invalid_argument);
+}
+
 int main(int argc, char* argv[]) {
   testing::InitGoogleTest(&argc, argv);
 
