@@ -15,12 +15,19 @@ test:
 	$(CC) $(COVFLAG) s21_matrix_oop.cpp s21_test.cpp -o test $(TEST_FLAGS)
 	./test
 
+gcov_report: clean test
+	lcov -o S21Matrix.info -c -d .
+	genhtml -o report S21Matrix.info
+	open ./
+
+valgrind: test
+	valgrind  --track-origins=yes --leak-check=full --show-leak-kinds=all -v ./test
+
 clang_n:
 	clang-format -n *.cpp *.h 
 
 clang_i:
 	clang-format -i *.cpp *.h 
-
 
 clean:
 	rm -rf *.o 
@@ -28,3 +35,4 @@ clean:
 	rm -rf test
 	rm -rf *.gcda
 	rm -rf *.gcno
+	rm -rf *.info
