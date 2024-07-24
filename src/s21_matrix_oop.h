@@ -23,6 +23,7 @@ class S21Matrix {
   S21Matrix();
   S21Matrix(int rows, int cols);
   S21Matrix(const S21Matrix& other);
+  S21Matrix(S21Matrix&& other);
   ~S21Matrix();
 
   // Метод
@@ -33,7 +34,8 @@ class S21Matrix {
   void mul_matrix(const S21Matrix& other);
   S21Matrix transpose();
   double determinant();
-   S21Matrix calc_complements();
+  S21Matrix calc_complements();
+  S21Matrix inverse_matrix();
 
   //  Перегрузка операторов
   S21Matrix& operator=(const S21Matrix& other);
@@ -47,6 +49,14 @@ class S21Matrix {
   S21Matrix operator*(const double num);
   S21Matrix& operator*=(const S21Matrix& other);
   S21Matrix operator*(const S21Matrix& other);
+
+  // Геттер
+  int get_rows() const;
+  int get_cols() const;
+
+  // Сеттер
+  void set_rows(int rows);
+  void set_cols(int cols);
 };
 
 #endif

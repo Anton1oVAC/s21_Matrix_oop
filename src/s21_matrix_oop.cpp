@@ -21,6 +21,19 @@ S21Matrix::S21Matrix(const S21Matrix& other) {
   this->copy_matrix_value(other);
 }
 
+// создать матрицу переносом другой
+S21Matrix::S21Matrix(S21Matrix&& other) {
+  rows_ = other.rows_;
+  cols_ = other.cols_;
+  this->allocate_matrix();
+  this->copy_matrix_value(other);
+
+  other.rows_ = 0;
+  other.cols_ = 0;
+}
+
+
+// ######## Диструктор
 // Освобождает динамически выделенную память.
 S21Matrix::~S21Matrix() {
   delete[] matrix_[0];
@@ -95,6 +108,17 @@ void S21Matrix::mul_matrix(const S21Matrix& other) {
   *this = result;
 }
 
+// Транспонирование матрицы
+S21Matrix S21Matrix::transpose() {
+  S21Matrix transpose_matrix(cols_, rows_);
+  for (int i = 0; i < rows_; i++) {
+    for (int j = 0; j < cols_; j++) {
+      transpose_matrix.matrix_[j][i] = matrix_[i][j];
+    }
+  }
+  return transpose_matrix;
+}
+
 // Детерминант матрицы
 double S21Matrix::determinant() {
   if (rows_ != cols_) {
@@ -106,8 +130,7 @@ double S21Matrix::determinant() {
   if (size == 1) {
     result = matrix_[0][0];
   } else if (size == 2) {
-    result += matrix_[0][0] * matrix_[1][1];
-    result -= matrix_[0][1] * matrix_[1][0];
+    result = matrix_[0][0] * matrix_[1][1] - matrix_[0][1] * matrix_[1][0];
   } else {
     double temp_deterinant = 0;
 
@@ -162,16 +185,25 @@ S21Matrix S21Matrix::calc_complements() {
   return result;
 }
 
+// обратная матрица
+S21Matrix S21Matrix::inverse_matrix() {
+  double determinant = this->determinant();
+  if (determinant == 0) {
+    throw std::invalid_argument("incorrect det");
+  }
+  S21Matrix result(rows_, cols_);
+  if (rows_ == 1) {
+    result.matrix_[0][0] = 1;
 
-// Транспонирование матрицы
-S21Matrix S21Matrix::transpose() {
-  S21Matrix transpose_matrix(cols_, rows_);
-  for (int i = 0; i < rows_; i++) {
-    for (int j = 0; j < cols_; j++) {
-      transpose_matrix.matrix_[j][i] = matrix_[i][j];
+  } else {
+    result = calc_complements().transpose();
+    for (int i = 0; i < result.rows_; i++) {
+      for (int j = 0; j < result.cols_; j++) {
+        result(i, j) *= (1 / determinant);
+      }
     }
   }
-  return transpose_matrix;
+  return result;
 }
 
 // ###########  Перегрузка операторов
@@ -199,7 +231,7 @@ double& S21Matrix::operator()(int i, int j) {
   return matrix_[i][j];
 }
 
-// Складывает другую матрицу с текущей.
+// Складывает другую матрицу с текущей
 S21Matrix& S21Matrix::operator+=(const S21Matrix& other) {
   this->sum_matrix(other);
   return *this;
@@ -250,6 +282,69 @@ S21Matrix S21Matrix::operator*(const S21Matrix& other) {
   result.mul_matrix(other);
   return result;
 }
+
+
+// Accessor (Геттеры)
+
+int S21Matrix::get_rows() const { return rows_; }
+
+int S21Matrix::get_cols() const { return cols_; }
+
+
+// Mutator (Сеттеры)
+
+void S21Matrix::set_rows(int rows) {
+  if (rows <= 0) {
+    throw std::invalid_argument("Error: rows matrix is ​​less than one");
+  }
+  S21Matrix temp(rows, cols_);
+  if (rows > rows_) {
+    for (int i = 0; i < rows_; i++) {
+      for (int j = 0; j < cols_; j++) {
+        temp.matrix_[i][j] = matrix_[i][j];
+      }
+    }
+    for (int n = rows_; n < rows; n++) {
+      for (int m = 0; m < cols_; m++) {
+        temp.matrix_[n][m] = 0;
+      }
+    }
+  } else {
+    for (int k = 0; k < rows; k++) {
+      for (int l = 0; l < cols_; l++) {
+        temp.matrix_[k][l] = matrix_[k][l];
+      }
+    }
+  }
+  *this = temp;
+}
+
+void S21Matrix::set_cols(int cols) {
+  if (cols <= 0) {
+    throw std::invalid_argument("Error: cols matrix is ​​less than one");
+  }
+  S21Matrix temp(rows_, cols);
+  if (cols > rows_) {
+    for (int i = 0; i < rows_; i++) {
+      for (int j = 0; j < cols_; j++) {
+        temp.matrix_[i][j] = matrix_[i][j];
+      }
+    }
+    for (int n = 0; n < rows_; n++) {
+      for (int m = cols_; m < cols; m++) {
+        temp.matrix_[n][m] = 0;
+      }
+    }
+  } else {
+    for (int k = 0; k < rows_; k++) {
+      for (int l = 0; l < cols; l++) {
+        temp.matrix_[k][l] = matrix_[k][l];
+      }
+    }
+  }
+  *this = temp;
+}
+
 
 // ############ Доп методы
 
